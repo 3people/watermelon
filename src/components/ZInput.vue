@@ -3,8 +3,9 @@
     :value="modelValue"
     @input="onInput"
     :placeholder="placeholder"
-    :class="style({ filled })"
+    :class="style({ filled, disabled })"
     :maxlength="max"
+    :disabled="disabled"
   />
 </template>
 <script setup lang="ts">
@@ -15,6 +16,7 @@ const props = defineProps({
   max: { type: Number, default: 8 },
   modelValue: { type: String, default: '' },
   placeholder: { type: String, default: '닉네임을 입력하세요' },
+  disabled: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:model-value'])
@@ -34,6 +36,10 @@ const style = cva(
       filled: {
         true: '',
         false: 'border-dark-green',
+      },
+      disabled: {
+        true: 'border-dark-green text-dark-green bg-green',
+        false: 'border-black',
       },
     },
   },

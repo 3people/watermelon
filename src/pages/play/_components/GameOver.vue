@@ -11,11 +11,14 @@
           @click="toggleBanner('top')"
           class="flex items-center justify-end"
         >
-          <span class="text-banner-r">
-            잠시만요!
-            <br />
-            <strong class="text-banner-b">이벤트 참여하면 상품</strong>을 받을 수 있어요
-          </span>
+          <div class="text-banner-r">
+            <div class="flex items-center">
+              <span>잠시만요!</span>
+              <img v-if="isSuccess" :src="eventJoinTag" alt="event join tag" class="ml-1" />
+            </div>
+            <span class="text-banner-b">이벤트 참여하면 상품</span>
+            <span>을 받을 수 있어요</span>
+          </div>
           <img :src="giftZzio" alt="gift-zzio" />
           <img :src="arrow" alt="arrow" class="rotate-180 h-6" />
         </div>
@@ -39,7 +42,7 @@
         <div class="mt-4 text-body-b">
           <div>
             <label class="mb-2 block">닉네임</label>
-            <z-input :model-value="nickname" />
+            <z-input :disabled="true" :model-value="nickname" />
           </div>
           <div class="mt-4">
             <label class="mb-2 block">전화번호</label>
@@ -108,10 +111,11 @@ import rankBanner from '@/assets/rank-banner.png'
 import coinSm from '@/assets/coin-sm.svg'
 import giftZzio from '@/assets/gift-zzio.svg'
 import arrow from '@/assets/arrow.svg'
+import eventJoinTag from '@/assets/event-join-tag.svg'
 import { usePostEvent } from '@/requests/use/usePostEvent.ts'
 import eventTitle from '@/assets/event-title.svg'
 import { usePostRank } from '@/requests/use/usePostRank.ts'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import ZInput from '@/components/ZInput.vue'
 import ZButton from '@/components/button/ZButton.vue'
 import ZCheckbox from '@/components/ZCheckbox.vue'
@@ -129,7 +133,7 @@ const props = defineProps({
 })
 
 const { data, mutate } = usePostRank()
-const { mutate: mutateEvent } = usePostEvent()
+const { isSuccess, mutate: mutateEvent } = usePostEvent()
 
 const rank = computed(() => data?.value?.rank)
 const total = computed(() => data?.value?.count)
@@ -168,6 +172,12 @@ const onClickSubmit = () => {
     mutateEvent({ userId: userId.value, phoneNumber: phoneNumber.value })
   }
 }
+
+watch(isSuccess, () => {
+  if (isSuccess.value) {
+    activeBanner.value = 'bottom'
+  }
+})
 
 onMounted(() => {
   // 이벤트 기간 지나지 않았을 경우 rank 등록
