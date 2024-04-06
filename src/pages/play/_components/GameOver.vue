@@ -4,7 +4,7 @@
     v-else
     class="absolute inset-0 flex flex-col items-center justify-center z-50 bg-transBlack-50 px-6"
   >
-    <div v-if="isOpen()" class="mb-2">
+    <div v-if="isEventOpen()" class="mb-2">
       <div :class="topBannerStyle">
         <div @click="toggleBanner('')" class="flex items-center justify-end">
           <div v-if="!isSuccess" class="text-banner-r mr-auto">
@@ -80,7 +80,7 @@
               <img :src="coinSm" alt="코인" />
             </div>
           </div>
-          <div v-if="isOpen()" class="w-full flex justify-between">
+          <div v-if="isEventOpen()" class="w-full flex justify-between">
             <span>순위</span>
             <span class="text-body-b">{{ rank }}등 / {{ total }}명</span>
           </div>
@@ -97,7 +97,7 @@
           </ZRoundButton>
         </div>
         <img
-          v-if="isOpen()"
+          v-if="isEventOpen()"
           class="max-w-72"
           :src="rankBanner"
           alt="실시간 랭킹 바로가기"
@@ -127,6 +127,7 @@ import ZButton from '@/components/button/ZButton.vue'
 import ZCheckbox from '@/components/ZCheckbox.vue'
 import PrivacyTerm from '@/pages/play/_components/PrivacyTerm.vue'
 import { getGameId } from '@/utils/get-game-id.ts'
+import { isEventOpen } from '@/utils/check-event-open.ts'
 
 const props = defineProps({
   nickname: {
@@ -161,12 +162,6 @@ const buttonText = computed(() => (isSuccess.value ? '제출 완료' : '제출�
 
 const isPrivacyTermOpen = ref<boolean>(false)
 
-const isOpen = () => {
-  const current = new Date()
-  const closeTime = new Date('2024-04-19T23:59:59+09:00')
-  return current < closeTime
-}
-
 const toggleBanner = (position: string) => {
   if (position === '') {
     activeBanner.value = activeBanner.value === 'top' ? 'bottom' : 'top'
@@ -185,9 +180,15 @@ const onClickSubmit = () => {
   }
 }
 
+watch(isSuccess, () => {
+  if (isSuccess.value) {
+    activeBanner.value = 'bottom'
+  }
+})
+
 onMounted(() => {
   // 이벤트 기간 지나지 않았을 경우 rank 등록
-  if (props.nickname && isOpen()) {
+  if (props.score && props.nickname && isEventOpen()) {
     mutate({
       score: props.score,
       nickName: props.nickname,

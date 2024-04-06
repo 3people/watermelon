@@ -1,8 +1,8 @@
 <template>
   <a href="https://www.instagram.com/zzzi_ori" target="_blank">
-    <Counter :target="closeTime" :current="currentRef" class="mt-3" />
+    <Counter class="mt-3" />
   </a>
-  <div class="flex flex-col flex-1 items-center px-6">
+  <div class="flex flex-col flex-1 justify-center items-center px-6">
     <img :src="zzioGame" alt="zzio game" class="mt-6" />
     <img :src="title" alt="황금 찌오를 찾아라 beta" class="my-3" />
     <img :src="illustration" alt="찌오 이미지" class="mb-6" />
@@ -28,27 +28,22 @@ import info from '../../assets/info.svg'
 import illustration from '../../assets/illustration.svg'
 import ZButton from '../../components/button/ZButton.vue'
 import Footer from '../../components/Footer.vue'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Notice from './_components/Notice.vue'
 import ZInput from '../../components/ZInput.vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../stores/user.ts'
 import Counter from './_components/Counter.vue'
+import { isEventOpen } from '@/utils/check-event-open.ts'
 
 const router = useRouter()
 const userStore = useUserStore()
 
-const currentRef = ref<Date>(new Date())
-const isOpenRef = computed<boolean | undefined>(() => isOpen(currentRef.value))
-const closeTime = new Date('2024-04-05T23:59:59+09:00')
-
-const isOpen = (current: Date) => {
-  return current < closeTime
-}
+const isOpenRef = ref<boolean>(isEventOpen())
 
 onMounted(() => {
   const interval = setInterval(() => {
-    currentRef.value = new Date()
+    isOpenRef.value = isEventOpen()
   }, 1000)
   return () => clearInterval(interval)
 })

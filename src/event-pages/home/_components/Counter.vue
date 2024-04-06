@@ -1,4 +1,8 @@
 <template>
+  <div v-if="remainingTime > 0"
+       class="w-full bg-green border-y-2 border-white text-white text-body-b flex justify-center items-center gap-2 py-1.5">
+    <img :src="event" alt="event" />
+    <span>이벤트 종료까지</span>
   <div
     v-if="remainingTime > 0"
     class="w-full relative bg-green border-y-2 border-white text-white text-body-b flex justify-center items-center py-1.5"
@@ -11,17 +15,23 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
-import event from '@/assets/event-white.svg'
+import { computed, onMounted, ref } from 'vue'
+import event from '../../../assets/event-white.svg'
 import instagram from '@/assets/instagram.svg'
+import { targetTime } from '@/utils/check-event-open.ts'
 
-const props = defineProps({
-  target: { type: Date, default: new Date() },
-  current: { type: Date, default: new Date() },
+const currentRef = ref<Date>(new Date())
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    currentRef.value = new Date()
+  }, 1000)
+  return () => clearInterval(interval)
 })
 
+
 const remainingTime = computed(() => {
-  return props.target.getTime() - props.current.getTime()
+  return targetTime.getTime() - currentRef.value.getTime()
 })
 
 const remainingDays = computed(() => {
