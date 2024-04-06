@@ -1,5 +1,5 @@
 <template>
-  <a href="https://www.instagram.com/zzzi_ori" target="_blank">
+  <a href="https://www.instagram.com/p/C5anjFMP-9n/?utm_source=ig_web_copy_link" target="_blank">
     <Counter class="mt-3" />
   </a>
   <div class="flex flex-col flex-1 justify-center items-center px-6">
