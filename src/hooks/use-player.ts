@@ -145,7 +145,7 @@ export const usePlayer = (
   }
 
   const addBlock = () => {
-    // currentBlockRef.value = createBlock(4, widthRef.value / 2, 60, ratioRef.value, true)
+    // currentBlock = createBlock(9, width / 2, 60, ratio, true)
     currentBlock = createBlock(nextBlockRef.value, width / 2, 60, ratio, true)
     isSetBlock = false
     World.add(engine.world, currentBlock)
