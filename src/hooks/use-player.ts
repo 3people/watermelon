@@ -1,16 +1,16 @@
-import {Body, Engine, Events, Render, Runner, World} from 'matter-js'
-import {blocks} from '../pages/play/setting.ts'
-import {createBlock, getBlockIndex, getDynamicCanvasHeight, setField} from '../utils'
-import {onMounted, Ref, ref} from 'vue'
-import {useTimer} from './use-timer.ts'
+import { Body, Engine, Events, Render, Runner, World } from 'matter-js'
+import { blocks } from '../pages/play/setting.ts'
+import { createBlock, getBlockIndex, getDynamicCanvasHeight, setField } from '../utils'
+import { onMounted, Ref, ref } from 'vue'
+import { useTimer } from './use-timer.ts'
 
 export const usePlayer = (
   element: Ref<HTMLCanvasElement | undefined>,
 ) => {
   const engine = Engine.create(
     {
-      gravity: {x: 0, y: 0.4},
-      timing: {timeScale: 1.5}
+      gravity: { x: 0, y: 0.4 },
+      timing: { timeScale: 1.5 },
     })
   const runner = Runner.create()
 
@@ -50,8 +50,8 @@ export const usePlayer = (
         background: 'transparent',
         width,
         height,
-        pixelRatio: window.devicePixelRatio
-      }
+        pixelRatio: window.devicePixelRatio,
+      },
     })
 
     setField(engine.world, width, height)
@@ -71,7 +71,7 @@ export const usePlayer = (
       if (element?.value?.clientWidth && x > 0 && x < element.value.clientWidth) {
         onDrag(x)
       }
-    }, {passive: true})
+    }, { passive: true })
 
     element.value.addEventListener('touchend', () => {
       drop()
@@ -79,6 +79,9 @@ export const usePlayer = (
   })
 
   Events.on(engine, 'collisionStart', (event) => {
+    if (gameOverRef.value) {
+      return
+    }
     event.pairs.forEach((collision) => {
       if (collision.bodyA.label === 'line' || collision.bodyB.label === 'line') {
         const circle = collision.bodyA.label === 'line' ? collision.bodyB.id : collision.bodyA.id
@@ -106,7 +109,7 @@ export const usePlayer = (
       const newBlock = createBlock(index + 1, collision.collision.supports[0].x, collision.collision.supports[0].y, ratio)
       World.remove(engine.world, [collision.bodyA, collision.bodyB])
       World.add(engine.world, newBlock)
-    }
+    },
     )
   })
 
@@ -119,7 +122,7 @@ export const usePlayer = (
     })
   })
 
-  const {start, reset} = useTimer(3, () => {
+  const { start, reset } = useTimer(3, () => {
     endGame()
   })
 
@@ -175,7 +178,7 @@ export const usePlayer = (
     if (!currentBlock || isSetBlock) {
       return
     }
-    Body.setPosition(currentBlock, {x, y: 60})
+    Body.setPosition(currentBlock, { x, y: 60 })
   }
 
   const endGame = () => {
@@ -199,5 +202,5 @@ export const usePlayer = (
     addBlock()
   }
 
-  return {replay, nextBlockRef, groundHeightRef, gameOverRef, scoreRef}
+  return { replay, nextBlockRef, groundHeightRef, gameOverRef, scoreRef }
 }
