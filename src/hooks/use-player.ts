@@ -146,7 +146,7 @@ export const usePlayer = (
 
   const addBlock = () => {
     // currentBlock = createBlock(9, width / 2, 60, ratio, true)
-    currentBlock = createBlock(nextBlockRef.value, width / 2, 60, ratio, true)
+    currentBlock = createBlock(nextBlockRef.value, width / 2, 60 * ratio, ratio, true)
     isSetBlock = false
     World.add(engine.world, currentBlock)
     setNextBlock()
@@ -178,7 +178,7 @@ export const usePlayer = (
     if (!currentBlock || isSetBlock) {
       return
     }
-    Body.setPosition(currentBlock, { x, y: 60 })
+    Body.setPosition(currentBlock, { x, y: 60 * ratio })
   }
 
   const endGame = () => {
