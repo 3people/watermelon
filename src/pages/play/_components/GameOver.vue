@@ -121,6 +121,7 @@ import ZButton from '@/components/button/ZButton.vue'
 import ZCheckbox from '@/components/ZCheckbox.vue'
 import PrivacyTerm from '@/pages/play/_components/PrivacyTerm.vue'
 import { getGameId } from '@/utils/get-game-id.ts'
+import { isEventOpen } from '@/utils/check-event-open.ts'
 
 const props = defineProps({
   nickname: {
@@ -154,12 +155,6 @@ const isFormFilled = computed(
 
 const isPrivacyTermOpen = ref<boolean>(false)
 
-const isOpen = () => {
-  const current = new Date()
-  const closeTime = new Date('2024-04-19T23:59:59+09:00')
-  return current < closeTime
-}
-
 const toggleBanner = (position: string) => {
   activeBanner.value = position
 }
@@ -182,7 +177,7 @@ watch(isSuccess, () => {
 
 onMounted(() => {
   // 이벤트 기간 지나지 않았을 경우 rank 등록
-  if (props.score && props.nickname && isOpen()) {
+  if (props.score && props.nickname && isEventOpen()) {
     mutate({
       score: props.score,
       nickName: props.nickname,
