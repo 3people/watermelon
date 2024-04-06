@@ -4,40 +4,34 @@
     v-else
     class="absolute inset-0 flex flex-col items-center justify-center z-50 bg-transBlack-50 px-6"
   >
-    <div class="mb-2">
+    <div v-if="isOpen()" class="mb-2">
       <div :class="topBannerStyle">
-        <div
-          v-if="activeBanner === 'bottom'"
-          @click="toggleBanner('top')"
-          class="flex items-center justify-end"
-        >
-          <div class="text-banner-r">
-            <div class="flex items-center">
-              <span>잠시만요!</span>
-              <img v-if="isSuccess" :src="eventJoinTag" alt="event join tag" class="ml-1" />
-            </div>
+        <div @click="toggleBanner('')" class="flex items-center justify-end">
+          <div v-if="!isSuccess" class="text-banner-r mr-auto">
+            <span>잠시만요!</span><br />
             <span class="text-banner-b">이벤트 참여하면 상품</span>
             <span>을 받을 수 있어요</span>
           </div>
-          <img :src="giftZzio" alt="gift-zzio" />
-          <img :src="arrow" alt="arrow" class="rotate-180 h-6" />
-        </div>
-        <div v-else @click="toggleBanner('bottom')" class="w-full flex justify-end items-center">
-          <img :src="eventTitle" alt="event title" />
-          <img :src="arrow" alt="arrow" class="h-6 ml-[42px]" />
+          <div v-else class="text-banner-r mr-auto">
+            <span class="text-banner-b">이벤트 참여 완료!</span><br />
+            <span>결과 발표를 기다리찌오!</span>
+          </div>
+          <img :src="giftZzio" alt="gift zzio" />
+          <img
+            :src="arrow"
+            alt="arrow"
+            :class="[activeBanner === 'top' ? '' : 'rotate-180', 'h-6']"
+          />
         </div>
       </div>
       <div
         v-if="activeBanner === 'top'"
         class="w-[340px] rounded-b-2xl border-2 border-black border-t-0 bg-light-green p-4"
       >
-        <div class="flex flex-col text-center">
-          <span>🎁<strong>찌오게임 TOP4를 위한 특별한 선물</strong>🎁</span>
-          <span class="mt-2 text-caption-r">
-            닉네임과 전화번호를 입력해 이벤트 참여하고<br />
-            <strong>찌오 바디필로우(1명)부터 찌오 소형인형(3명)</strong>까지<br />
-            찌오가 준비한 선물 받아가세요! (~4/19)
-          </span>
+        <div class="flex flex-col items-center text-center">
+          <img :src="eventTitle" alt="event title" class="w-[130px] h-[28px] mb-2" />
+          <span class="text-caption-b">명예의 찌오당에 이름을 올리고 공식 굿즈 받아가세요!</span>
+          <span class="text-caption-r">자세한 내용은 @zzzi_ori 에서 확인하세요 </span>
         </div>
         <div class="mt-4 text-body-b">
           <div>
@@ -47,6 +41,12 @@
           <div class="mt-4">
             <label class="mb-2 block">전화번호</label>
             <z-input v-model="phoneNumber" placeholder="번호를 입력해 주세요" :max="11" />
+            <div class="mt-2 flex">
+              <img :src="info" alt="info" class="mr-1" />
+              <span class="text-caption-r text-dark-green"
+                >전화번호를 다시 한 번 확인해주세요.</span
+              >
+            </div>
           </div>
           <div class="mt-6 flex items-center">
             <z-checkbox v-model="isPrivacyPolicyAgreed" />
@@ -55,8 +55,8 @@
             </div>
             <div class="ml-auto cursor-pointer" @click="togglePrivacyTerm">보기</div>
           </div>
-          <z-button class="mt-6" :disabled="!isFormFilled" @click="onClickSubmit"
-          >이벤트 참여하기
+          <z-button class="mt-6" :disabled="!isFormFilled || isSuccess" @click="onClickSubmit">
+            {{ buttonText }}
           </z-button>
         </div>
       </div>
@@ -80,7 +80,7 @@
               <img :src="coinSm" alt="코인" />
             </div>
           </div>
-          <div class="w-full flex justify-between">
+          <div v-if="isOpen()" class="w-full flex justify-between">
             <span>순위</span>
             <span class="text-body-b">{{ rank }}등 / {{ total }}명</span>
           </div>
@@ -96,7 +96,13 @@
             <img :src="replay" alt="다시하기" />
           </ZRoundButton>
         </div>
-        <img class="max-w-72" :src="rankBanner" alt="실시간 랭킹 바로가기" @click="$emit('rank')" />
+        <img
+          v-if="isOpen()"
+          class="max-w-72"
+          :src="rankBanner"
+          alt="실시간 랭킹 바로가기"
+          @click="$emit('rank')"
+        />
       </template>
     </div>
   </div>
@@ -111,7 +117,7 @@ import rankBanner from '@/assets/rank-banner.png'
 import coinSm from '@/assets/coin-sm.svg'
 import giftZzio from '@/assets/gift-zzio.svg'
 import arrow from '@/assets/arrow.svg'
-import eventJoinTag from '@/assets/event-join-tag.svg'
+import info from '@/assets/info.svg'
 import { usePostEvent } from '@/requests/use/usePostEvent.ts'
 import eventTitle from '@/assets/event-title.svg'
 import { usePostRank } from '@/requests/use/usePostRank.ts'
@@ -142,8 +148,8 @@ const userId = computed(() => data?.value?.userId)
 
 const activeBanner = ref<string>('bottom')
 const topBannerStyle = computed(() => [
-  activeBanner.value === 'top' ? 'rounded-t-2xl py-4' : 'rounded-2xl py-2',
-  'bg-gradient-to-r w-[340px] from-gradient-yellow to-gradient-pink px-4 border-2 border-black',
+  activeBanner.value === 'top' ? 'rounded-t-2xl' : 'rounded-2xl',
+  'bg-gradient-to-r w-[340px] from-gradient-yellow to-gradient-pink px-4 py-2 border-2 border-black',
 ])
 
 const phoneNumber = ref<string>('')
@@ -151,6 +157,7 @@ const isPrivacyPolicyAgreed = ref<boolean>(false)
 const isFormFilled = computed(
   () => props.nickname && phoneNumber.value && isPrivacyPolicyAgreed.value,
 )
+const buttonText = computed(() => (isSuccess.value ? '제출 완료' : '제출하기'))
 
 const isPrivacyTermOpen = ref<boolean>(false)
 
@@ -161,6 +168,10 @@ const isOpen = () => {
 }
 
 const toggleBanner = (position: string) => {
+  if (position === '') {
+    activeBanner.value = activeBanner.value === 'top' ? 'bottom' : 'top'
+    return
+  }
   activeBanner.value = position
 }
 
@@ -174,15 +185,9 @@ const onClickSubmit = () => {
   }
 }
 
-watch(isSuccess, () => {
-  if (isSuccess.value) {
-    activeBanner.value = 'bottom'
-  }
-})
-
 onMounted(() => {
   // 이벤트 기간 지나지 않았을 경우 rank 등록
-  if (props.score && props.nickname && isOpen()) {
+  if (props.nickname && isOpen()) {
     mutate({
       score: props.score,
       nickName: props.nickname,

@@ -38,7 +38,7 @@ const style = cva(
         false: 'border-dark-green',
       },
       disabled: {
-        true: 'bg-white',
+        true: 'bg-white border-dark-green text-dark-gray',
         false: 'border-black',
       },
     },
