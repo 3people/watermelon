@@ -40,12 +40,17 @@
           </div>
           <div class="mt-4">
             <label class="mb-2 block">전화번호</label>
-            <z-input v-model="phoneNumber" placeholder="번호를 입력해 주세요" :max="11" />
+            <z-input
+              v-model="phoneNumber"
+              type="number"
+              placeholder="번호를 입력해 주세요"
+              :max="11"
+            />
             <div class="mt-2 flex">
               <img :src="info" alt="info" class="mr-1" />
-              <span class="text-caption-r text-dark-green"
-                >전화번호를 다시 한 번 확인해주세요.</span
-              >
+              <span class="text-caption-r text-dark-green">
+                전화번호를 다시 한 번 확인해주세요.
+              </span>
             </div>
           </div>
           <div class="mt-6 flex items-center">

@@ -1,5 +1,16 @@
 <template>
   <input
+    v-if="type === 'number'"
+    type="number"
+    :value="modelValue"
+    @input="onInput"
+    :placeholder="placeholder"
+    :class="style({ filled, disabled })"
+    :maxlength="max"
+    :disabled="disabled"
+  />
+  <input
+    v-else
     :value="modelValue"
     @input="onInput"
     :placeholder="placeholder"
@@ -13,6 +24,7 @@ import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 
 const props = defineProps({
+  type: { type: String, default: 'text' },
   max: { type: Number, default: 8 },
   modelValue: { type: String, default: '' },
   placeholder: { type: String, default: '닉네임을 입력하세요' },
