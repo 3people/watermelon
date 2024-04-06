@@ -1,15 +1,16 @@
-import {zaxios} from '../zaxios.ts'
+import { zaxios } from '../zaxios.ts'
 
 export interface PostRankParams {
-    nickName: string,
-    score: number
+  nickName: string
+  score: number
+  gameId: string
 }
 
 export interface PostRankResult {
-    userId: number
-    rank: number
-    count: number
-    currentTime: number
+  userId: number
+  rank: number
+  count: number
+  currentTime: number
 }
 
 export const postRank = async (params: PostRankParams): Promise<PostRankResult> => {

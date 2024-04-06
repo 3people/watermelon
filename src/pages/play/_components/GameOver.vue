@@ -56,7 +56,7 @@
             <div class="ml-auto cursor-pointer" @click="togglePrivacyTerm">보기</div>
           </div>
           <z-button class="mt-6" :disabled="!isFormFilled" @click="onClickSubmit"
-            >이벤트 참여하기
+          >이벤트 참여하기
           </z-button>
         </div>
       </div>
@@ -120,6 +120,7 @@ import ZInput from '@/components/ZInput.vue'
 import ZButton from '@/components/button/ZButton.vue'
 import ZCheckbox from '@/components/ZCheckbox.vue'
 import PrivacyTerm from '@/pages/play/_components/PrivacyTerm.vue'
+import { getGameId } from '@/utils/get-game-id.ts'
 
 const props = defineProps({
   nickname: {
@@ -185,6 +186,7 @@ onMounted(() => {
     mutate({
       score: props.score,
       nickName: props.nickname,
+      gameId: getGameId(),
     })
   }
 })
