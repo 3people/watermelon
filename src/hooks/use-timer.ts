@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 export const useTimer = (limit: number, callback: () => void) => {
   const count = ref<undefined | number>(undefined)
@@ -12,10 +12,10 @@ export const useTimer = (limit: number, callback: () => void) => {
   }
 
   const start = () => {
-    count.value = limit
     if (interval) {
       return
     }
+    count.value = limit
     interval = setInterval(() => {
       if (count.value) {
         count.value = count.value - 1
@@ -32,5 +32,5 @@ export const useTimer = (limit: number, callback: () => void) => {
     clear()
   }
 
-  return {count, reset, start}
+  return { count, reset, start }
 }
