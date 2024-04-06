@@ -1,8 +1,4 @@
 <template>
-  <div v-if="remainingTime > 0"
-       class="w-full bg-green border-y-2 border-white text-white text-body-b flex justify-center items-center gap-2 py-1.5">
-    <img :src="event" alt="event" />
-    <span>이벤트 종료까지</span>
   <div
     v-if="remainingTime > 0"
     class="w-full relative bg-green border-y-2 border-white text-white text-body-b flex justify-center items-center py-1.5"
@@ -28,7 +24,6 @@ onMounted(() => {
   }, 1000)
   return () => clearInterval(interval)
 })
-
 
 const remainingTime = computed(() => {
   return targetTime.getTime() - currentRef.value.getTime()

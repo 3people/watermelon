@@ -121,7 +121,7 @@ import info from '@/assets/info.svg'
 import { usePostEvent } from '@/requests/use/usePostEvent.ts'
 import eventTitle from '@/assets/event-title.svg'
 import { usePostRank } from '@/requests/use/usePostRank.ts'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import ZInput from '@/components/ZInput.vue'
 import ZButton from '@/components/button/ZButton.vue'
 import ZCheckbox from '@/components/ZCheckbox.vue'
@@ -179,12 +179,6 @@ const onClickSubmit = () => {
     mutateEvent({ userId: userId.value, phoneNumber: phoneNumber.value })
   }
 }
-
-watch(isSuccess, () => {
-  if (isSuccess.value) {
-    activeBanner.value = 'bottom'
-  }
-})
 
 onMounted(() => {
   // 이벤트 기간 지나지 않았을 경우 rank 등록
