@@ -2,7 +2,7 @@
   <a href="https://www.instagram.com/zzzi_ori" target="_blank">
     <Counter class="mt-3" />
   </a>
-  <div class="flex flex-col flex-1 items-center px-6">
+  <div class="flex flex-col flex-1 justify-center items-center px-6">
     <img :src="zzioGame" alt="zzio game" class="mt-6" />
     <img :src="title" alt="황금 찌오를 찾아라 beta" class="my-3" />
     <img :src="illustration" alt="찌오 이미지" class="mb-6" />
