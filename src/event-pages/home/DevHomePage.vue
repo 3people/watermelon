@@ -11,9 +11,9 @@
       <span>{{ isOpenRef ? '랭킹에 올라갈 ' : '' }}닉네임을 8자 이내로 적으찌오</span>
     </div>
     <ZInput v-model="userStore.nickName" />
-    <ZButton @click="onClickPlay" color="primary" :disabled="!userStore.nickName" class="mt-2"
-      >게임 시작</ZButton
-    >
+    <ZButton @click="onClickPlay" color="primary" :disabled="!userStore.nickName" class="mt-2">
+      게임 시작
+    </ZButton>
     <ZButton v-if="isOpenRef" @click="onClickRank" color="secondary" :disabled="false" class="mt-6">
       실시간 랭킹
     </ZButton>
